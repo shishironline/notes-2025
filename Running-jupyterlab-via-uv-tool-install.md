@@ -146,7 +146,9 @@ Installed 1 package in 396ms
 Installed 4 executables: jlpm.exe, jupyter-lab.exe, jupyter-labextension.exe, jupyter-labhub.exe`
 
 Then start jupyterlab with
+
 `jupyter-lab`
+
 ---------------------------------------------------------
 
 ## Getting %pip to work
@@ -163,7 +165,6 @@ When I tried to run this I got this error:
 
 It turns out we have an installation with no pip binary."
 
-
 Simon found that
 
 There may be a better way to do this, but he found that this worked, 
@@ -178,12 +179,24 @@ After he ran this, the %pip magic command worked as expected - I didn't even nee
 
 **I was unable to run this command as for now.**
 
-In our trial, we got:
+In our trial, we got the following error when running `%pip install llm` in a jupyter notebook cell:
 
 `%pip install llm`
 
-%pip: The term '%pip' is not recognized as a name of a cmdlet, function, script file, or executable program.
-Check the spelling of the name, or if a path was included, verify that the path is correct and try again.`
+%pip: The term '%pip' is not recognized as a name of a cmdlet, function, script file, or executable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
 
-Let us get to the doumentation of this magic command.
+This indicates that the `%pip` magic command is not recognized by the current Jupyter kernel.
 
+Let us get to the documentation of this magic command.
+
+To fix this, we need to ensure that the Python environment used by Jupyter has `pip` installed and accessible. The solution provided by Simon is to run the following code in a Jupyter notebook cell:
+
+```python
+import subprocess, sys
+
+subprocess.check_call([sys.executable, "-m", "ensurepip"])
+```
+
+This code uses the `ensurepip` module to install `pip` if it's not already present in the current Python environment. After running this, the `%pip` magic command should work as expected.
+
+**Note:** If you still encounter issues, you might need to restart the Jupyter kernel or even the Jupyter server for the changes to take effect.
